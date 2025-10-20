@@ -1,0 +1,52 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger"'
+
+variables:
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+  GIT_DEPTH: "0"
+
+stages:
+  - pull_code
+  - security_scan
+  - export_logs
+
+pull_code:
+  stage: pull_code
+  image: alpine:latest
+  before_script:
+    - apk update && apk add git bash curl
+  script:
+    - git clone --branch main [https://github.com/Neelkanth-khithani/vulnerable-testapp.git](https://github.com/Neelkanth-khithani/vulnerable-testapp.git) vulnerable-testapp
+    - mv vulnerable-testapp/* .
+    - rm -rf vulnerable-testapp
+    - git status
+    - ls -la
+  artifacts:
+    paths:
+      - .
+
+sonarqube_scan:
+  stage: security_scan
+  image: sonarsource/sonar-scanner-cli:latest
+  script:
+    - mkdir -p security_reports
+    - sonar-scanner -Dsonar.projectKey=neelkanth-khithani_security-scanning-pipeline -Dsonar.sources=. -Dsonar.python.version=3.9
+    - curl --silent --show-error --fail -u "$SONAR_TOKEN:" "[https://sonarcloud.io/api/issues/search?componentKeys=neelkanth-khithani_security-scanning-pipeline](https://sonarcloud.io/api/issues/search?componentKeys=neelkanth-khithani_security-scanning-pipeline)" -o security_reports/sonarqube_report.json || echo "{}" > security_reports/sonarqube_report.json
+  dependencies:
+    - pull_code
+  artifacts:
+    paths:
+      - security_reports/sonarqube_report.json
+
+export_security_logs:
+  stage: export_logs
+  image: google/cloud-sdk:latest
+  before_script:
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS" > /tmp/gcp-key.json
+    - gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
+    - gcloud config set project 672844091200 # Replace with your GCP Project ID or Number
+  script:
+    - gsutil cp -r security_reports/* gs://your-json-uploads/ # Replace with your GCS Bucket Name
+  dependencies:
+    - sonarqube_scan
