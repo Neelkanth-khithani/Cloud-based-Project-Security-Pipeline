@@ -1,5 +1,23 @@
-
 # Project Implementation CookBook
+
+## Architecture Diagram
+
+![Architecture Diagram](images/architecture_diagram.png)
+
+# Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Basic Setup & Configuration](#1-basic-setup--configuration)
+    - [GitLab Project Repository Initialization](#1a-gitlab-project-repository-initialization)
+    - [SonarCloud Security Scanning Setup](#1b-sonarcloud-security-scanning-setup)
+- [Google Cloud Storage Configuration for Security Logs](#2-google-cloud-storage-configuration-for-security-logs)
+    - [Google Cloud Setup](#2a-google-cloud-setup)
+    - [GitLab CI/CD Pipeline](#2b-gitlab-cicd-pipeline-gitlab-ciyml)
+- [Setting up Cloud Functions (Log Processing)](#3-setting-up-cloud-functions-log-processing)
+    - [Python Function (main.py)](#python-function-mainpy)
+- [Google Cloud BigQuery Setup for Data Analysis](#4-google-cloud-bigquery-setup-for-data-analysis)
+- [Final Verification and Pipeline Execution](#5-final-verification-and-pipeline-execution)
+- [Acknowledgements](#acknowledgements)
 
 ## A Step-by-Step Guide for Implementation of a Cloud Computing Security Pipeline
 ## Prerequisites
@@ -238,7 +256,13 @@ To maximize the practical value of the security pipeline, the final CSV output c
 ![App](/images/app.png)
 
 
-### Contributors
+
+
+# Acknowledgements
+
+This project was developed as part of the Cloud Computing under the Computer Engineering Department, V.E.S. Institute of Technology, Mumbai.
+
+## Contributors
 
 | Role | Name | Contact |
 | :--- | :--- | :--- |
@@ -246,3 +270,5 @@ To maximize the practical value of the security pipeline, the final CSV output c
 | **Project Implementer** | Ishwari Dehadray | 2022.ishwari.dehadray@ves.ac.in |
 | **Project Implementer** | Atharv Inamdar | 2022.atharv.inamdar@ves.ac.in |
 | **Project Mentor** | Mr. Richard Joseph | richard.joseph@ves.ac.in |
+
+I would like to express my sincere gratitude to Mr. Richard Joseph, Professor, Computer Engineering Department, for her invaluable guidance, encouragement, and support throughout this project.
